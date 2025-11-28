@@ -1,0 +1,16 @@
+# Directory di build di Rust
+/target/
+
+# Node modules (per frontend JS/TS)
+node_modules/
+
+# File temporanei
+*.rs.bk
+*.log
+*.tmp
+
+# Configurazioni IDE
+.vscode/
+.idea/
+
+

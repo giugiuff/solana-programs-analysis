@@ -1,0 +1,8 @@
+[fuzz.metrics]
+enabled = true
+
+
+[[fuzz.programs]]
+address = "BDkpnjtGdVNhUVCY4iFcJFPy33j5hnPkf6cDHvsiBFCn"
+program = "../target/deploy/signer_authorization.so"
+ 

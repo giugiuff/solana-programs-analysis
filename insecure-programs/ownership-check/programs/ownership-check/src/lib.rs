@@ -9,8 +9,8 @@ declare_id!("GhD5bDw7vBR7mo9ET56VNH85ThYqXTuWdebpGTpHvaoj");
 pub mod ownership_check {
     use super::*;
 
-    // Insecure logging of token balance, version 1
-    // This function logs the balance of a token account by directly accessing the `amount` field.
+    // Registrazione non sicura del saldo del token, versione 1
+    // Questa funzione registra il saldo di un account token accedendo direttamente al campo `amount`.
     pub fn insecure_log_balance_v1(ctx: Context<InsecureOwnershipv1>) -> Result<()> {
         msg!(
             "The balance: {} of Token Account: {} corresponds to owner: {} and Mint: {}",
@@ -22,8 +22,8 @@ pub mod ownership_check {
         Ok(())
     }
 
-    // Insecure logging of token balance, version 2
-    // This function logs the balance of a token account by unpacking the account data.
+    // Registrazione non sicura del saldo del token, versione 2
+    // Questa funzione registra il saldo di un account token scompattando i dati dell'account.
     pub fn insecure_log_balance_v2(ctx: Context<InsecureOwnershipv2>) -> Result<()> {
         let token = SPLTokenAccount::unpack(&ctx.accounts.token_account.data.borrow())?;
 
@@ -41,11 +41,11 @@ pub mod ownership_check {
 
 #[derive(Accounts)]
 pub struct InsecureOwnershipv1<'info> {
-    // The mint account
+    // L'account della mint
     pub mint: Account<'info, Mint>,
-    // The token account
+    // L'account del token
     pub token_account: Account<'info, TokenAccount>,
-    // The owner of the token account
+    // Il proprietario dell'account token
     pub token_account_owner: Signer<'info>,
 }
 
@@ -53,9 +53,8 @@ pub struct InsecureOwnershipv1<'info> {
 pub struct InsecureOwnershipv2<'info> {
     // The mint account
     pub mint: Account<'info, Mint>,
-    /// CHECK: this is not secure as it can be whatever Account
+    /// CHECK: non è sicuro perché può essere un Account qualsiasi
     pub token_account: AccountInfo<'info>,
-    // The owner of the token account
+    // Il proprietario dell'account token
     pub token_account_owner: Signer<'info>,
 }
-

@@ -9,7 +9,7 @@ const BPS: u64 = 10000; // Basis points in a percent (10000 BPS = 100%)
 pub mod duplicate_mutable_accounts {
     use super::*;
 
-    // Initialize a new vault
+    // Inizializza un nuovo vault
     pub fn initialize_vault(ctx: Context<InitializeVault>) -> Result<()> {
         let vault = &mut ctx.accounts.vault;
 
@@ -19,7 +19,7 @@ pub mod duplicate_mutable_accounts {
         Ok(())
     }
 
-    // Initialize a fee vault
+    // Inizializza il vault delle commissioni
     pub fn initialize_fee_vault(ctx: Context<InitializeFeeVault>) -> Result<()> {
         let fee_vault = &mut ctx.accounts.vault;
 
@@ -29,7 +29,7 @@ pub mod duplicate_mutable_accounts {
         Ok(())
     }
 
-    // Deposit an amount into the vault
+    // Deposita un importo nel vault
     pub fn deposit(ctx: Context<Deposit>, amount: u64) -> Result<()> {
         let vault = &mut ctx.accounts.vault;
 
@@ -37,32 +37,32 @@ pub mod duplicate_mutable_accounts {
         Ok(())
     }
 
-    // Secure atomic trade between two vaults
+    // // Scambio atomico sicuro tra due vault
     pub fn secure_atomic_trade(ctx: Context<AtomicTrade>, transfer_amount: u64) -> Result<()> {
         let fee_vault = &mut ctx.accounts.fee_vault;
         let vault_a = &mut ctx.accounts.vault_a;
         let vault_b = &mut ctx.accounts.vault_b;
 
-        // Ensure vault_a and vault_b are different accounts
+        // verifica che vault_a e vault_b sono account differenti
         if vault_a.key() == vault_b.key() {
             return err!(AtomicTradeError::DuplicateVaults);
         }
 
-        // Calculate the fee
+        // calcola la commissione
         let fee = transfer_amount
             .checked_mul(FEE_BPS)
             .unwrap()
             .checked_div(BPS)
             .unwrap();
 
-        // Calculate the amount after deducting the fee
+        // Calcola l'importo dopo aver dedotto la commissione
         let fee_deducted = transfer_amount.checked_sub(fee).unwrap();
 
         msg!("Vault A amount before: {}", vault_a.amount);
         msg!("Vault B amount before: {}", vault_b.amount);
         msg!("Fee Vault amount before: {}", fee_vault.amount);
 
-        // Update the amounts in the respective vaults
+        // Aggiorna gli importi nei rispettivi vault
         fee_vault.amount = fee_vault.amount.checked_add(fee).unwrap();
         vault_a.amount = vault_a.amount.checked_add(fee_deducted).unwrap();
         vault_b.amount = vault_b.amount.checked_sub(fee_deducted).unwrap();

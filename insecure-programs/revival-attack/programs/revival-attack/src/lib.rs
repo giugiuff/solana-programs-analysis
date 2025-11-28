@@ -6,6 +6,8 @@ declare_id!("BxYhDihgJZZxUXqwoqvzbfD8G1fwNFKQyF8L5SEiNCQP");
 pub mod revival_attack {
     use super::*;
 
+    /// Inizializza l'account dei metadati salvando un PIN a quattro byte.
+    /// Non viene impostato alcun flag di inizializzazione, consentendo scritture future.
     pub fn initialize_metadata(
         ctx: Context<InitializeMetadata>,
         secret1: u8,
@@ -23,6 +25,8 @@ pub mod revival_attack {
         msg!("Metadata Created");
         Ok(())
     }
+    /// Chiude l'account dei metadati restituendo i lamport al creatore.
+    /// Vulnerabilità: l'account viene svuotato ma resta riutilizzabile per un revival attack.
     pub fn close_metadata(ctx: Context<CloseMetadata>) -> Result<()> {
         let metadata = &mut ctx.accounts.metadata;
         let creator = &mut ctx.accounts.creator;
@@ -39,6 +43,8 @@ pub mod revival_attack {
         Ok(())
     }
 
+    /// Verifica il PIN confrontando i quattro byte salvati nello stato.
+    /// Se l'account è stato revivificato da un attaccante, i controlli avverranno sui nuovi dati.
     pub fn verify_pin(
         ctx: Context<VerifyPin>,
         secret1: u8,
@@ -72,6 +78,7 @@ pub struct InitializeMetadata<'info> {
     pub creator: Signer<'info>,
     #[account(
         init,
+        // Seed costante: rende il PDA prevedibile e facile da riaprire dopo la chiusura.
         payer = creator,
         space = 8 + SecretMetadata::LEN,
         seeds=[b"secret_metadata",creator.key().as_ref()],
@@ -87,6 +94,7 @@ pub struct CloseMetadata<'info> {
     pub creator: Signer<'info>,
     #[account(
         mut,
+        // Riusa il PDA anche se precedentemente chiuso; non verifica che i segreti siano validi.
         seeds=[b"secret_metadata",creator.key().as_ref()],
         bump,
     )]
@@ -98,6 +106,7 @@ pub struct VerifyPin<'info> {
     pub creator: Signer<'info>,
     #[account(
         mut,
+        // L'account potrebbe essere stato ricreato da un attaccante prima della verifica.
         seeds=[b"secret_metadata",creator.key().as_ref()],
         bump,
     )]
@@ -106,16 +115,19 @@ pub struct VerifyPin<'info> {
 
 #[account]
 pub struct SecretMetadata {
+    // Proprietario registrato del PIN; non viene azzerato in `remove_metadata`.
     pub creator: Pubkey,
+    // Quattro byte che rappresentano il PIN segreto.
     pub secret1: u8,
     pub secret2: u8,
     pub secret3: u8,
     pub secret4: u8,
 }
 
-impl SecretMetadata {
-    pub const LEN: usize = 32 + 4;
+impl SecretMetadata {// 32 + 4
+    pub const LEN: usize = 36;
     pub fn remove_metadata(&mut self) {
+        // Azzera i segreti ma non rimuove l'autorità, favorendo il revival attack.
         self.secret1 = 0;
         self.secret2 = 0;
         self.secret3 = 0;

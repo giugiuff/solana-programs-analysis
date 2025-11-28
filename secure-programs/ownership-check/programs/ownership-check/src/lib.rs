@@ -9,8 +9,8 @@ declare_id!("4u6h9QAMT8TuXauVZa9ieeQext18EtjecnX95xxw4xaa");
 pub mod ownership_check {
     use super::*;
 
-    // Secure logging of token balance, version 1
-    // This function logs the balance of a token account with security checks using Anchor's account constraints.
+    // Registrazione non sicura del saldo del token, versione 1
+    //  registra il saldo di un account token accedendo direttamente al campo `amount`.
     pub fn secure_log_balance_v1(ctx: Context<SecureOwnershipv1>) -> Result<()> {
         msg!(
             "The balance: {} of Token Account: {} corresponds to owner: {} and Mint: {}",
@@ -21,8 +21,8 @@ pub mod ownership_check {
         );
         Ok(())
     }
-    // Secure logging of token balance, version 2
-    // This function logs the balance of a token account with security checks using Anchor's associated token constraints.
+    // Registrazione non sicura del saldo del token, versione 2
+    // registra il saldo di un account token scompattando i dati dell'account.
     pub fn secure_log_balance_v2(ctx: Context<SecureOwnershipv2>) -> Result<()> {
         msg!(
             "The balance: {} of Token Account: {} corresponds to owner: {} and Mint: {}",
@@ -37,15 +37,15 @@ pub mod ownership_check {
 
 #[derive(Accounts)]
 pub struct SecureOwnershipv1<'info> {
-    // The mint account
+    
     pub mint: Account<'info, Mint>,
-    // The token account with constraints to ensure the correct mint and owner
+    //il token account con i contraints per assicurare il corretto mint e owner
     #[account(
         token::authority = token_account_owner,
         token::mint = mint
     )]
     pub token_account: Account<'info, TokenAccount>,
-    // The owner of the token account
+    // proprietario token account
     pub token_account_owner: Signer<'info>,
 }
 
@@ -53,12 +53,12 @@ pub struct SecureOwnershipv1<'info> {
 pub struct SecureOwnershipv2<'info> {
     // The mint account
     pub mint: Account<'info, Mint>,
-    // The token account with associated token constraints to ensure the correct mint and owner
+    // il token account con associated token constraints per assicurare il corretto mint e owner
     #[account(
         associated_token::authority = token_account_owner,
         associated_token::mint = mint
     )]
     pub token_account: Account<'info, TokenAccount>,
-    // The owner of the token account
+    
     pub token_account_owner: Signer<'info>,
 }

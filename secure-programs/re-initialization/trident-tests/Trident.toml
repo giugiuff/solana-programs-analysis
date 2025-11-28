@@ -1,0 +1,8 @@
+[fuzz.metrics]
+enabled = true
+
+
+[[fuzz.programs]]
+address = "5wrTsnYf52JRAd8tSZDCCacQpFfLfVD64W7cHJ8FG7Ac"
+program = "../target/deploy/re_initialization.so"
+ 

@@ -1,0 +1,12 @@
+[fuzz.metrics]
+enabled = true
+
+
+[[fuzz.programs]]
+address = "3Rp7wE8v6S5Sd6mqikGQWo1tQ2jC8DfSPm1mf31zUGgH"
+program = "../target/deploy/account_reloading.so"
+
+[[fuzz.programs]]
+address = "94WcpeofNg8iKm4u8Veh5EYYhpTzDfaWGe7WknzKuNeG"
+program = "../target/deploy/update_account.so"
+ 

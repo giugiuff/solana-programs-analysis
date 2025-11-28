@@ -1,0 +1,8 @@
+[fuzz.metrics]
+enabled = true
+
+
+[[fuzz.programs]]
+address = "GhD5bDw7vBR7mo9ET56VNH85ThYqXTuWdebpGTpHvaoj"
+program = "../target/deploy/ownership_check.so"
+ 

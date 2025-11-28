@@ -1,0 +1,8 @@
+[fuzz.metrics]
+enabled = true
+
+
+[[fuzz.programs]]
+address = "5JeEqUd5HHFtPSagJM13tjN57Ry9rmkt5pNacJ53g618"
+program = "../target/deploy/type_cosplay.so"
+ 

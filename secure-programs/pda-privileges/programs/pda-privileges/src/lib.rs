@@ -9,24 +9,24 @@ pub mod pda_privileges {
 
     use super::*;
 
-    // Initialize the vault and the metadata account
+    // Inizializza il vault e l'account di metadata
     pub fn initialize_vault(ctx: Context<InitializeVault>) -> Result<()> {
         let metadata_account = &mut ctx.accounts.metadata_account;
-        // Set the creator of the metadata account
+        // Imposta il creatore dell'account di metadata
         metadata_account.creator = ctx.accounts.vault_creator.key();
         Ok(())
     }
 
-    // Secure withdrawal from the vault
+    // Prelievo sicuro dal vault
     pub fn secure_withdraw(ctx: Context<SecureWithdraw>) -> Result<()> {
-        // Get the amount to be withdrawn
+        // Ottieni l'importo da prelevare
         let amount = ctx.accounts.vault.amount;
         let metadata_account = &mut ctx.accounts.metadata_account;
 
-        // Define the signer seeds for the PDA (Program Derived Address)
+        // Definisci i signer seeds per la PDA (Program Derived Address)
         let signer_seeds: &[&[&[u8]]] = &[&[b"metadata_account", metadata_account.creator.as_ref(), &[ctx.bumps.metadata_account]]];
 
-        // Create the CPI context for the token transfer
+        // Crea il contesto CPI per il trasferimento di token
         let cpi_context = CpiContext::new_with_signer(
             ctx.accounts.token_program.to_account_info(),
             Transfer {
@@ -37,7 +37,7 @@ pub mod pda_privileges {
             signer_seeds,
         );
 
-        // Perform the token transfer
+        // Esegui il trasferimento di token
         transfer(cpi_context, amount)?;
         Ok(())
     }
@@ -45,10 +45,10 @@ pub mod pda_privileges {
 
 #[derive(Accounts)]
 pub struct InitializeVault<'info> {
-    // The vault creator (signer) of the transaction
+    // Il creatore del vault (firmatario) della transazione
     #[account(mut)]
     pub vault_creator: Signer<'info>,
-    // The token account representing the vault
+    // L'account token che rappresenta il vault
     #[account(
         init,
         payer = vault_creator,
@@ -56,7 +56,7 @@ pub struct InitializeVault<'info> {
         associated_token::authority = metadata_account,
     )]
     pub vault: Account<'info, TokenAccount>,
-    // The metadata account, which stores the creator information
+    // L'account di metadata, che memorizza le informazioni sul creatore
     #[account(
         init,
         payer = vault_creator,
@@ -65,43 +65,43 @@ pub struct InitializeVault<'info> {
         bump,
     )]
     pub metadata_account: Account<'info, MetadataAccount>,
-    // The mint account
+    // L'account della mint
     pub mint: Account<'info, Mint>,
-    // System program account
+    // Account del programma di sistema
     pub system_program: Program<'info, System>,
-    // Token program account
+    // Account del programma token
     pub token_program: Program<'info, Token>,
-    // Associated token program account
+    // Account del programma di token associati
     pub associated_token_program: Program<'info, AssociatedToken>,
 }
 
 #[derive(Accounts)]
 pub struct SecureWithdraw<'info> {
-    // The creator (signer) of the transaction
+    // Il creatore (firmatario) della transazione
     pub creator: Signer<'info>,
-    // The token account representing the vault
+    // L'account token che rappresenta il vault
     #[account(
         mut,
         associated_token::mint = mint,
         associated_token::authority = metadata_account,
     )]
     pub vault: Account<'info, TokenAccount>,
-    // The destination token account for withdrawal
+    // L'account token di destinazione per il prelievo
     #[account(
         mut,
         token::mint = mint,
     )]
     pub withdraw_destination: Account<'info, TokenAccount>,
-    // The metadata account, which stores the creator information and ensures it matches the creator
+    // L'account di metadata, che memorizza le informazioni sul creatore e ne verifica la corrispondenza
     #[account(
         seeds = [b"metadata_account",metadata_account.creator.key().as_ref()],
         bump,
         has_one = creator,
     )]
     pub metadata_account: Account<'info, MetadataAccount>,
-    // The mint account
+    // L'account della mint
     pub mint: Account<'info, Mint>,
-    // Token program account
+    // Account del programma token
     pub token_program: Program<'info, Token>,
 }
 

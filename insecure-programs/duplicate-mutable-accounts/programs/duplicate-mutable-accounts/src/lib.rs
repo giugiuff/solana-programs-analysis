@@ -2,14 +2,14 @@ use anchor_lang::prelude::*;
 
 declare_id!("2bSdoVHibWNGdDRZrd3bYJpSNyEMu2DRVpgPPajdoU24");
 
-const FEE_BPS: u64 = 1200; // Fee basis points (1200 BPS = 12%)
-const BPS: u64 = 10000; // Basis points in a percent (10000 BPS = 100%)
+const FEE_BPS: u64 = 1200; // Punti base della commissione (1200 BPS = 12%)
+const BPS: u64 = 10000; // Punti base in una percentuale (10000 BPS = 100%)
 
 #[program]
 pub mod duplicate_mutable_accounts {
     use super::*;
 
-    // Initialize a new vault
+    // Inizializza un nuovo vault
     pub fn initialize_vault(ctx: Context<InitializeVault>) -> Result<()> {
         let vault = &mut ctx.accounts.vault;
 
@@ -19,7 +19,7 @@ pub mod duplicate_mutable_accounts {
         Ok(())
     }
 
-    // Initialize a fee vault
+    // Inizializza il vault delle commissioni
     pub fn initialize_fee_vault(ctx: Context<InitializeFeeVault>) -> Result<()> {
         let fee_vault = &mut ctx.accounts.vault;
 
@@ -29,7 +29,7 @@ pub mod duplicate_mutable_accounts {
         Ok(())
     }
 
-    // Deposit an amount into the vault
+    // Deposita un importo nel vault
     pub fn deposit(ctx: Context<Deposit>, amount: u64) -> Result<()> {
         let vault = &mut ctx.accounts.vault;
 
@@ -37,30 +37,30 @@ pub mod duplicate_mutable_accounts {
         Ok(())
     }
 
-    // Insecure atomic trade between two vaults
+    // Scambio atomico insicuro tra due vault
     pub fn insecure_atomic_trade(ctx: Context<AtomicTrade>, transfer_amount: u64) -> Result<()> {
         let fee_vault = &mut ctx.accounts.fee_vault;
         let vault_a = &mut ctx.accounts.vault_a;
         let vault_b = &mut ctx.accounts.vault_b;
 
-        // Issue: No check to ensure vault_a and vault_b are different accounts
-        // If they are the same, it will lead to logical errors and unintended state changes
+        // Problema: nessun controllo per assicurare che vault_a e vault_b siano account diversi
+        // Se coincidono, si generano errori logici e modifiche dello stato indesiderate
 
-        // Calculate the fee
+        // Calcola la commissione
         let fee = transfer_amount
             .checked_mul(FEE_BPS)
             .unwrap()
             .checked_div(BPS)
             .unwrap();
 
-        // Calculate the amount after deducting the fee
+        // Calcola l'importo dopo aver dedotto la commissione
         let fee_deducted = transfer_amount.checked_sub(fee).unwrap();
 
         msg!("Vault A amount before: {}", vault_a.amount);
         msg!("Vault B amount before: {}", vault_b.amount);
         msg!("Fee Vault amount before: {}", fee_vault.amount);
 
-        // Update the amounts in the respective vaults
+        // Aggiorna gli importi nei rispettivi vault
         fee_vault.amount = fee_vault.amount.checked_add(fee).unwrap();
         vault_a.amount = vault_a.amount.checked_add(fee_deducted).unwrap();
         vault_b.amount = vault_b.amount.checked_sub(fee_deducted).unwrap();
@@ -122,8 +122,8 @@ pub struct AtomicTrade<'info> {
     #[account(
         mut,
         constraint = vault_a.owner == signer_a.key(),
-        // This can also resolve the security Issue !!
-        // constraint = vault_a.key() != vault_b.key() @ AtomicTradeError::DuplicateVaults,
+        // Anche questo può risolvere il problema di sicurezza!!
+        // Vincolo equivalente: constraint = vault_a.key() != vault_b.key() @ AtomicTradeError::DuplicateVaults,
         seeds = [b"vault",signer_a.key().as_ref()],
         bump
     )]
@@ -150,7 +150,8 @@ pub struct Vault {
 }
 
 impl Vault {
-    const LEN: usize = 32 + 8;
+    // 32 + 8
+    const LEN: usize = 40;
 }
 
 #[error_code]

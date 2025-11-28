@@ -1,0 +1,8 @@
+[fuzz.metrics]
+enabled = true
+
+
+[[fuzz.programs]]
+address = "8GN5wnP7R8eUhvHYW8hf9hWjyc8PoU4mEWDCSHsyESQ3"
+program = "../target/deploy/initialization_frontrunning.so"
+ 

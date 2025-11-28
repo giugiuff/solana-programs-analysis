@@ -1,0 +1,45 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.log
+*.tmp
+
+# Node / Yarn
+node_modules/
+.npm/
+.pnpm-debug.log*
+yarn-error.log*
+.pnp.*
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+
+# Anchor / Solana build output
+**/.anchor/
+target/
+**/target/
+**/test-ledger/
+*.so
+*.a
+
+# Rust backup files
+**/*.rs.bk
+
+# Analyzer / fuzzing artifacts
+# (TENIAMO i report di analisi in git, quindi NON ignoriamo analysis-reports/)
+**/trident-tests/target/
+**/trident-tests/trident-output/**
+**/trident-tests/fuzz_*/artifacts/**
+**/trident-tests/fuzz_*/coverage/**
+**/trident-tests/fuzz_*/crashes/**
+**/trident-tests/fuzz_*/hangs/**
+
+# Misc caches
+coverage/
+dist/
+build/
+tmp/

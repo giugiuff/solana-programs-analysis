@@ -1,0 +1,8 @@
+[fuzz.metrics]
+enabled = true
+
+
+[[fuzz.programs]]
+address = "2bSdoVHibWNGdDRZrd3bYJpSNyEMu2DRVpgPPajdoU24"
+program = "../target/deploy/duplicate_mutable_accounts.so"
+ 

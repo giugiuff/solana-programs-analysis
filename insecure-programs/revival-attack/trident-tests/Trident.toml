@@ -1,0 +1,8 @@
+[fuzz.metrics]
+enabled = true
+
+
+[[fuzz.programs]]
+address = "BxYhDihgJZZxUXqwoqvzbfD8G1fwNFKQyF8L5SEiNCQP"
+program = "../target/deploy/revival_attack.so"
+ 

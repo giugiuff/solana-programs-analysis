@@ -1,0 +1,8 @@
+[fuzz.metrics]
+enabled = true
+
+
+[[fuzz.programs]]
+address = "FufZySVu1t5niHkT1Botiyssi9cgUcQtBXJQtNsiRbwM"
+program = "../target/deploy/account_data_matching.so"
+ 

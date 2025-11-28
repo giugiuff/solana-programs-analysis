@@ -52,5 +52,5 @@ pub struct Escrow {
 }
 
 impl Escrow {
-  pub const LEN: usize = 32 + 1; // Pubkey + u8
+  pub const LEN: usize = 33; // Pubkey + u8
 }

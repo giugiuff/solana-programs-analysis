@@ -1,0 +1,16 @@
+[fuzz.metrics]
+enabled = true
+
+
+[[fuzz.programs]]
+address = "27KMmAJRGvicJx2BhBY8LvPhSTgVQVigDmzP9JCqYfoa"
+program = "../target/deploy/arbitrary_cpi.so"
+
+[[fuzz.programs]]
+address = "6HHWk9zBVkq8XNTTpE9tidRjjfTSEkAQeTqi3hnB6xsW"
+program = "../target/deploy/arbitrary_cpi_hacked.so"
+
+[[fuzz.programs]]
+address = "Ekq3FZqpHQ6coawYtyeG9QB3QWkx9zQGKSBewdQvUyyE"
+program = "../target/deploy/arbitrary_cpi_expected.so"
+ 

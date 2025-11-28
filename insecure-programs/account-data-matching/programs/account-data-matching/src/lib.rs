@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-declare_id!("G89cLRPVSKmXsYVZVRASfANWpDy84Qy8tPYux5yg6VWV");
+declare_id!("FufZySVu1t5niHkT1Botiyssi9cgUcQtBXJQtNsiRbwM");
 
 #[program]
 pub mod account_data_matching {
@@ -54,8 +54,8 @@ pub struct Vault {
     pub data: u8
 }
 
-impl Vault {
-    const LEN: usize = 32 + 1;
+impl Vault {//       33 + 1
+    const LEN: usize = 33;
 }
 
 #[error_code]

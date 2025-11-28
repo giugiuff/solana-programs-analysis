@@ -35,10 +35,6 @@ pub mod account_reloading {
             &ctx.accounts.metadata.input
         );
 
-        //decommentare e avviare anchor test per vedere meglio l'errore
-        /*let after = ctx.accounts.metadata.input;
-        require_eq!(after,new_input, ErrorCode::StaleData);*/
-
         Ok(())
     }
 

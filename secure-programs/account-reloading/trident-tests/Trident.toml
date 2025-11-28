@@ -1,0 +1,13 @@
+[fuzz.metrics]
+enabled = true
+fuzzing_with_stats = true
+dashboard = true
+
+[[fuzz.programs]]
+address = "8DjgPHfzsoDeQxiQHsv3ggKhNUzevHBEarftcgwntyaB"
+program = "../target/deploy/account_reloading.so"
+
+[[fuzz.programs]]
+address = "J7sgpJXG4fDUa3vbdTwjtTWkgnxxcHbg57hLnyQ6vRnH"
+program = "../target/deploy/update_account.so"
+ 

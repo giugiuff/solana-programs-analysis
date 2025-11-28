@@ -1,0 +1,8 @@
+[fuzz.metrics]
+enabled = true
+
+
+[[fuzz.programs]]
+address = "J6SWoen6bHQQEnPpU8TUiU46ABpthjcvrYeiXCcUXa17"
+program = "../target/deploy/pda_privileges.so"
+ 

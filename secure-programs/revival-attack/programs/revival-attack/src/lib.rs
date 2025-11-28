@@ -24,7 +24,7 @@ pub mod revival_attack {
         Ok(())
     }
     pub fn close_metadata(ctx: Context<CloseMetadata>) -> Result<()> {
-        let metadata = &mut ctx.accounts.metadata;
+      /*(mitigazione più in basso)  let metadata = &mut ctx.accounts.metadata;
         let creator = &mut ctx.accounts.creator;
 
         metadata.remove_metadata();
@@ -33,7 +33,7 @@ pub mod revival_attack {
 
         metadata.sub_lamports(metadata_balance)?;
         creator.add_lamports(metadata_balance)?;
-
+        */
         msg!("Metadata Removed");
 
         Ok(())
@@ -115,7 +115,7 @@ pub struct SecretMetadata {
 }
 
 impl SecretMetadata {
-    pub const LEN: usize = 32 + 4;
+    pub const LEN: usize = 36;
     pub fn remove_metadata(&mut self) {
         self.secret1 = 0;
         self.secret2 = 0;
