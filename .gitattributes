@@ -1,0 +1,2 @@
+# Considera tutti gli .html come documentazione 
+*.html linguist-documentation
